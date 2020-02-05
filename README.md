@@ -25,8 +25,6 @@ pip3 install python-telegram-bot --upgrade
 From source
 ```bash
 git clone https://github.com/spdd/codas.git
-cd codas
-python3 setup.py install
 ```
 
 ### Usage
