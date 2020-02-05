@@ -61,7 +61,7 @@ Run to control coda daemon from script (start, stop) and send notifications and 
 ~$ python3 codas.py --disable_observe --send_report -m telegram
 ```
 You will get something like that:
-<img src="screenshot.jpg"  width="320" height="420">
+<img src="screenshot.jpg"  width="480" height="986">
 
 ### How to create telegram bot?
 1. Find in Telegram **@BotFather** 
