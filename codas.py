@@ -12,6 +12,7 @@ from common.emojis import *
 class Codas(object):
     def __init__(self, config):
         self.observe = True
+        self.insecure_rest = False
         self.timer = None
         self.timer_inverval = int(config['Codas']['timer_inverval'])
         self.only_block_production = True if int(config['CodaParams']['only_block_production']) == 1 else False
@@ -123,7 +124,8 @@ class Codas(object):
             self.config['CodaParams']['wallet_password'], 
             self.config['CodaParams']['peer1'], 
             self.config['CodaParams']['peer2'],
-            self.config['CodaParams']['wallet_path'])
+            self.config['CodaParams']['wallet_path'],
+            '-insecure-rest-server' if self.insecure_rest else '')
         self.run_detach(cmd)
         logger.info("Codas", '{} Staking started!'.format(emoji_face_grimacing))
         self.staking_stopped = False
@@ -320,6 +322,7 @@ if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument("-o", "--disable_observe", help="Observe coda daemon, but not restart or stop", action="store_true")
     parser.add_argument("-r", "--send_report", help="Send crash reports to messengers", action="store_true")
+    parser.add_argument("-t", "--insecure_rest", help="Open to everyone graphql rest server not just localhost", action="store_true")
     parser.add_argument("-m", "--messenger", type=str, default="", help="Use to send notifications to messengers")
     args = parser.parse_args()
 
@@ -332,6 +335,9 @@ if __name__ == "__main__":
         logger.info("Codas", "{} Observation mode: {}".format(emoji_alarm_clock, codas.observe))
         if args.send_report:
             codas.sending_report = True
+        if args.insecure_rest:
+            codas.insecure_rest = True
+        logger.info("Codas", "{} Insecure rest server: {}".format(emoji_alarm_clock, codas.insecure_rest))
         logger.info("Codas", "{} Sending crash report: {}".format(emoji_hundred, codas.sending_report))
         if args.messenger != '':
             coda_listener = Codas.CodaListener(codas)
