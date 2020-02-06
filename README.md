@@ -44,6 +44,8 @@ optional arguments:
   -o, --disable_observe
                         Observe coda daemon, but not restart or stop
   -r, --send_report     Send crash reports to messengers
+  -t, --insecure_rest   Open to everyone graphql rest server not just
+                        localhost
   -m MESSENGER, --messenger MESSENGER
                         Use to send notifications to messengers
 ```
