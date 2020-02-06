@@ -223,7 +223,7 @@ class Codas(object):
         status = status_result['sync_status']
         if status in self.not_synced_statuses:
             # if not status gets stuck on not synced status then restart coda
-            if self.not_synced_count >= 20:
+            if self.not_synced_count >= int(self.config['Codas']['time_not_synced']):
                  self.stop_coda_and_snark_workers()
                  return
             self.not_synced_count += 1
