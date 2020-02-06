@@ -18,6 +18,7 @@ Python3 script to observe or control your [Coda](https://codaprotocol.com/docs/n
 ### Prerequisites
 ```
 sudo apt install curl -y
+sudo apt install screen -y
 pip3 install python-telegram-bot --upgrade
 ```
 
