@@ -19,7 +19,8 @@ class Codas(object):
         self.snark_worker_stopped = True
         self.staking_stopped = True
         self.config = config
-        self.daemon_pid = None
+        self.daemon_screen_pid = None
+        self.daemon_pid = 0
         self.pids = {}
         self.block_height = 0
         self.iblock = 0
@@ -39,10 +40,10 @@ class Codas(object):
         return subprocess.Popen([command], stdout=subprocess.PIPE, shell = True).communicate()[0].decode("utf-8").replace("\n", "")
 
     def run_detach(self, command):
-        self.daemon_pid = subprocess.Popen([command], stdout=subprocess.PIPE, shell = True, close_fds=True).pid
-        self.daemon_pid += 2
-        self.add_pid('daemon', self.daemon_pid)
-        logger.info("Codas", "{} daemon pid: {}".format(emoji_key, self.daemon_pid))
+        self.daemon_screen_pid = subprocess.Popen([command], stdout=subprocess.PIPE, shell = True, close_fds=True).pid
+        self.daemon_screen_pid += 2
+        self.add_pid('daemon_screen', self.daemon_screen_pid)
+        logger.info("Codas", "{} daemon screen pid: {}".format(emoji_key, self.daemon_screen_pid))
 
     def add_pid(self, name, pid):
         self.pids[name] = pid
@@ -97,6 +98,7 @@ class Codas(object):
     def stop_coda(self):
         if self.observe: return
         self.kill_process('daemon', self.pids['daemon'])
+        self.kill_process('daemon_screen', self.pids['daemon_screen'])
         self.staking_stopped = True
         msg = '{} Coda daemon stopped process: {}'.format(emoji_cross_mark, self.pids['daemon'])
         logger.info("Codas", msg)
@@ -143,6 +145,9 @@ class Codas(object):
                     continue
                 if int(pid) in self.pids.values(): 
                     continue
+                if len(self.pids.values()) == 0:
+                    self.daemon_pid = int(pid)
+                    self.add_pid('daemon', int(pid))
                 else: 
                     self.add_pid('snark worker ' + str(i), int(pid))
         
