@@ -8,6 +8,7 @@ Python3 script to observe or control your [Coda](https://codaprotocol.com/docs/n
   - restart after too long synchronization (if status gets stuck at Bootstrap, Catchup, Listening, Offline)
   - stop and start snark worker depend on proposal time
   - start after crash
+  - runtime config updating (no need to stop script to edit values in settings.conf)
 - Control coda daemon from telegram:
   - stop daemon
   - get balance
