@@ -222,7 +222,12 @@ class Codas(object):
             if diff_in_minutes <= int(self.config['Codas']['time_how_old_report']): 
                 logger.broadcast("Codas", 'You have a new crash report.', None , report_path)
 
+    def update_config(self):
+        if GlobalController.instance().update_config():
+            logger.info("Codas", "{} Config updated".format(emoji_biceps))
+
     def check_coda(self):
+        self.update_config()
         self.check_crash_report()
         self.iblock += 1
         fresh_running = False
