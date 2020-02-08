@@ -31,6 +31,7 @@ class Codas(object):
         self.not_synced_count = 0
         self.crash_report = None
         self.sending_report = False
+        self.not_running_count = 0
 
     def start(self):
         self.start_timer()
@@ -103,6 +104,11 @@ class Codas(object):
         msg = '{} Coda daemon stopped process: {}'.format(emoji_cross_mark, self.pids['daemon'])
         logger.info("Codas", msg)
         logger.broadcast("Codas", msg)
+    
+    def stop_all_coda(self):
+        self.stop_coda()
+        self.run(self.config['CodaCmd']['kill_coda'])
+        self.not_running_count = 0
 
     def stop_coda_and_snark_workers(self):
         if self.observe: return
@@ -136,8 +142,13 @@ class Codas(object):
         process_list = subprocess.Popen([self.config['CodaCmd']['check_process']], stdout=subprocess.PIPE, shell = True).communicate()[0].decode("utf-8").split("\n")
         if len(process_list) == 1:
             if process_list[0] == '':
+                if self.not_running_count == 3:
+                    self.stop_all_coda()
+                else:
+                    self.not_running_count += 1
                 return [], '{} Coda not running, 0 processes'.format(emoji_face_confused)
         else: 
+            self.not_running_count = 0
             process_list = process_list[:-1]
         for i, pid in enumerate(process_list):
             if pid.isdigit():
