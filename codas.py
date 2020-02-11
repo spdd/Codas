@@ -98,10 +98,12 @@ class Codas(object):
 
     def stop_coda(self):
         if self.observe: return
-        self.kill_process('daemon', self.pids['daemon'])
-        self.kill_process('daemon_screen', self.pids['daemon_screen'])
+        if 'daemon' in self.pids:
+            self.kill_process('daemon', self.pids['daemon'])
+            msg = '{} Coda daemon stopped process: {}'.format(emoji_cross_mark, self.pids['daemon'])
+        if 'daemon_screen' in self.pids:
+            self.kill_process('daemon_screen', self.pids['daemon_screen'])
         self.staking_stopped = True
-        msg = '{} Coda daemon stopped process: {}'.format(emoji_cross_mark, self.pids['daemon'])
         logger.info("Codas", msg)
         logger.broadcast("Codas", msg)
     
